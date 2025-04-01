@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>petproject038</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+    <style>
+        :root {
+            --primary: #6200ea;
+            --secondary: #03dac6;
+            --dark: #121212;
+            --light: #fafafa;
+            --accent: #ff4081;
+            --text: #212121;
+            --text-light: #757575;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .nav-container {
+            background-color: var(--dark);
+            color: white;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background: linear-gradient(135deg, rgba(98, 0, 234, 0.1) 0%, rgba(3, 218, 198, 0.1) 100%);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 5s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+        
+        .cta-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 0.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(98, 0, 234, 0.3);
+        }
+        
+        .cta-btn.secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .cta-btn.secondary:hover {
+            box-shadow: 0 10px 20px rgba(98, 0, 234, 0.2);
+        }
+        
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            color: var(--primary);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .about-text {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .architecture {
+            background-color: var(--dark);
+            color: white;
+            padding: 5rem 2rem;
+        }
+        
+        .architecture-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .architecture h2 {
+            color: var(--secondary);
+        }
+        
+        .architecture h2::after {
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+        
+        .architecture-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .architecture-diagram {
+            margin: 3rem auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .layer {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .layer:hover {
+            transform: translateX(10px);
+        }
+        
+        .layer-1 {
+            background-color: rgba(98, 0, 234, 0.2);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .layer-2 {
+            background-color: rgba(3, 218, 198, 0.2);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .layer-3 {
+            background-color: rgba(255, 64, 129, 0.2);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .layer-4 {
+            background-color: rgba(255, 193, 7, 0.2);
+            border-left: 4px solid #ffc107;
+        }
+        
+        .layer h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .layer p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        .principles {
+            padding: 5rem 2rem;
+            background-color: rgba(3, 218, 198, 0.05);
+        }
+        
+        .principles-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .principles-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-light);
+        }
+        
+        .accordion {
+            margin-top: 3rem;
+        }
+        
+        .accordion-item {
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .accordion-header {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary);
+            transition: background-color 0.3s;
+        }
+        
+        .accordion-header:hover {
+            background-color: rgba(98, 0, 234, 0.05);
+        }
+        
+        .accordion-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        
+        .accordion-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .accordion-content-inner {
+            padding: 1.5rem 0;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .active .accordion-icon {
+            transform: rotate(45deg);
+        }
+        
+        .active .accordion-content {
+            max-height: 500px;
+        }
+        
+        .resources {
+            padding: 5rem 2rem;
+        }
+        
+        .resources-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .resources-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-light);
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card-img {
+            height: 160px;
+            background-color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .card-btn {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .card-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+        }
+        
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.3s;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--dark);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0;
+                text-align: center;
+                padding: 1rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .feature-card {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Floating element animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container" id="particles-js"></div>
+    
+    <div class="nav-container">
+        <nav>
+            <a href="#" class="logo">
+                <span class="logo-icon">⚙️</span>
+                <span>WSMO</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#principles">Core Principles</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </nav>
+    </div>
+    
+    <section id="home" class="hero">
+        <h1 class="floating">Web Services Modeling Ontology</h1>
+        <p>WSMO provides a conceptual framework and a formal language for semantically describing all relevant aspects of web services to facilitate the automation of discovering, combining and invoking electronic services over the web.</p>
+        <div>
+            <a href="#about" class="cta-btn">Discover WSMO</a>
+            <a href="#resources" class="cta-btn secondary">Resources</a>
+        </div>
+    </section>
+    
+    <section id="about" class="section">
+        <h2 class="section-title">What is WSMO?</h2>
+        <p class="about-text">The Web Service Modeling Ontology (WSMO) is a conceptual model for describing various aspects related to Semantic Web Services. WSMO is based on the Web Service Modeling Framework (WSMF) and identifies four main elements for describing semantic web services:</p>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Ontologies</h3>
+                <p>Provide the terminology used by other WSMO elements to describe the relevant aspects of the domains of discourse. They define a formally specified terminology of the information used by all other components.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Web Services</h3>
+                <p>Describe the functional and behavioral aspects of a Web service. This includes the capability of the service, its interfaces, and internal working mechanisms.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Goals</h3>
+                <p>Define the user's objectives when consulting a Web service. Represent the user desires with respect to the requested functionality and specify what a service requester is looking for.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Mediators</h3>
+                <p>Describe elements that handle interoperability problems between different WSMO elements. They resolve heterogeneity issues that arise when connecting different systems.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="architecture" class="architecture">
+        <div class="architecture-inner">
+            <h2 class="section-title">WSMO Architecture</h2>
+            <p class="architecture-intro">The architecture of WSMO follows a layered approach, each layer building on top of the previous one to provide a comprehensive framework for semantic web services.</p>
+            
+            <div class="architecture-diagram">
+                <div class="layer layer-1">
+                    <h3>Conceptual Model</h3>
+                    <p>The top-level elements of Ontologies, Web Services, Goals, and Mediators form the conceptual backbone of WSMO.</p>
+                </div>
+                
+                <div class="layer layer-2">
+                    <h3>Formal Language: WSML</h3>
+                    <p>Web Service Modeling Language (WSML) provides a formal syntax and semantics for the WSMO conceptual model.</p>
+                </div>
+                
+                <div class="layer layer-3">
+                    <h3>Execution Environment: WSMX</h3>
+                    <p>Web Service Modeling Execution Environment (WSMX) serves as a reference implementation for WSMO, providing runtime capabilities.</p>
+                </div>
+                
+                <div class="layer layer-4">
+                    <h3>Applications & Use Cases</h3>
+                    <p>Real-world applications of WSMO in domains like e-commerce, enterprise application integration, and more.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="principles" class="principles">
+        <div class="principles-inner">
+            <h2 class="section-title">Core Principles of WSMO</h2>
+            <p class="principles-intro">WSMO is built upon several foundational principles that guide its design and application:</p>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Web Compliance</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            WSMO inherits and extends the concept of URI (Uniform Resource Identifier) for unique identification of resources. Furthermore, WSMO adopts the concept of namespaces for denoting consistent information spaces, and supports XML and other W3C Web technology recommendations.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Ontology-Based</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            Ontologies are used as the data model throughout WSMO. All resource descriptions and all data interchanged during service usage are based on ontologies. Ontological definitions allow for reuse, inheritance, and well-defined semantics.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Strict Decoupling</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            WSMO follows the principle of strict decoupling of various components that realize a service-oriented application. This means that each resource is described independently, without regard to possible usage or interactions with other resources.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Centrality of Mediation</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            Mediation addresses the heterogeneity that naturally exists in a distributed environment. WSMO recognizes the importance of mediation for resolving heterogeneities by including mediators as top-level elements to connect different WSMO elements.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Separation of Service Interface and Protocol</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            WSMO differentiates between the capabilities of a service (what a service can do) and the service interface (how the functionality can be achieved). This separation allows for flexible binding and improved reusability.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Description versus Implementation</span>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            WSMO differentiates between the description of Semantic Web Services elements and their actual implementation. Keeping the description separate from the implementation allows for more flexibility in deployment and usage.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="resources" class="resources">
+        <div class="resources-inner">
+            <h2 class="section-title">WSMO Resources</h2>
+            <p class="resources-intro">Explore these resources to learn more about WSMO and its applications in the semantic web services landscape:</p>
+            
+            <div class="cards">
+                <div class="card">
+                    <div class="card-img">📚</div>
+                    <div class="card-content">
+                        <h3>Documentation</h3>
+                        <p>Comprehensive documentation, including specifications, working drafts, and examples of WSMO implementation.</p>
+                        <a href="#" class="card-btn">View Docs</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">🧩</div>
+                    <div class="card-content">
+                        <h3>WSML Tooling</h3>
+                        <p>Tools and plugins for working with Web Service Modeling Language (WSML), the formal language of WSMO.</p>
+                        <a href="#" class="card-btn">Explore Tools</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">👨‍💻</div>
+                    <div class="card-content">
+                        <h3>Developer Resources</h3>
+                        <p>Code samples, APIs, and developer guides for implementing WSMO-based services in your applications.</p>
+                        <a href="#" class="card-btn">Get Started</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">🎓</div>
+                    <div class="card-content">
+                        <h3>Academic Papers</h3>
+                        <p>Research papers and academic resources exploring the theoretical foundations and applications of WSMO.</p>
+                        <a href="#" class="card-btn">Read Research</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-column">
+                <h3>WSMO</h3>
+                <p>Web Services Modeling Ontology provides a conceptual framework for semantic description of web services.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon">in</a>
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">g</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About WSMO</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#principles">Core Principles</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Related Projects</h3>
+                <ul class="footer-links">
+                    <li><a href="#">WSML (Web Service Modeling Language)</a></li>
+                    <li><a href="#">WSMX (Web Service Execution Environment)</a></li>
+                    <li><a href="#">OWL-S</a></li>
+                    <li><a href="#">Semantic Web Services</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Join Community</a></li>
+                    <li><a href="#">Newsletter</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2025 WSMO - Web Services Modeling Ontology. All Rights Reserved.
+        </div>
+    </footer>
+    
+    <script>
+        $(document).ready(function() {
+            // Mobile menu toggle
+            $('.mobile-menu-btn').click(function() {
+                $('.nav-links').toggleClass('active');
+            });
+            
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = $(this).attr('href');
+                const targetPosition = $(targetId).offset().top - 70;
+                
+                $('html, body').animate({
+                    scrollTop: targetPosition
+                }, 800, 'swing');
+                
+                // Close mobile menu if open
+                $('.nav-links').removeClass('active');
+            });
+            
+            // Accordion functionality
+            $('.accordion-header').click(function() {
+                $(this).parent().toggleClass('active');
+                $(this).parent().siblings().removeClass('active');
+            });
+            
+            // Fade-in animation on scroll
+            function fadeInOnScroll() {
+                $('.fade-in').each(function() {
+                    const elementTop = $(this).offset().top;
+                    const elementHeight = $(this).outerHeight();
+                    const windowHeight = $(window).height();
+                    const scrollY = $(window).scrollTop();
+                    
+                    if (scrollY > elementTop - windowHeight + elementHeight / 3) {
+                        $(this).addClass('visible');
+                    }
+                });
+            }
+            
+            // Run fade-in check on page load and scroll
+            fadeInOnScroll();
+            $(window).on('scroll', fadeInOnScroll);
+            
+            // Particles.js for background
+            if (window.particlesJS) {
+                particlesJS('particles-container', {
+                    particles: {
+                        number: {
+                            value: 30,
+                            density: {
+                                enable: true,
+                                value_area: 800
+                            }
+                        },
+                        color: {
+                            value: '#6200ea'
+                        },
+                        shape: {
+                            type: 'circle',
+                            stroke: {
+                                width: 0,
+                                color: '#000000'
+                            }
+                        },
+                        opacity: {
+                            value: 0.3,
+                            random: false,
+                            anim: {
+                                enable: false
+                            }
+                        },
+                        size: {
+                            value: 3,
+                            random: true,
+                            anim: {
+                                enable: false
+                            }
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 150,
+                            color: '#6200ea',
+                            opacity: 0.2,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 2,
+                            direction: 'none',
+                            random: false,
+                            straight: false,
+                            out_mode: 'out',
+                            bounce: false,
+                            attract: {
+                                enable: false
+                            }
+                        }
+                    },
+                    interactivity: {
+                        detect_on: 'canvas',
+                        events: {
+                            onhover: {
+                                enable: true,
+                                mode: 'grab'
+                            },
+                            onclick: {
+                                enable: true,
+                                mode: 'push'
+                            },
+                            resize: true
+                        },
+                        modes: {
+                            grab: {
+                                distance: 140,
+                                line_linked: {
+                                    opacity: 0.5
+                                }
+                            },
+                            push: {
+                                particles_nb: 4
+                            }
+                        }
+                    },
+                    retina_detect: true
+                });
+            }
+            
+            // Interactive architecture diagram
+            $('.layer').hover(
+                function() {
+                    const color = $(this).css('border-left-color');
+                    $(this).css('background-color', color.replace(')', ', 0.2)').replace('rgb', 'rgba'));
+                },
+                function() {
+                    // Return to original color on mouseout
+                }
+            );
+            
+            // GSAP animations for added visual appeal
+            if (window.gsap) {
+                gsap.from('.hero h1', {
+                    duration: 1.2,
+                    y: -50,
+                    opacity: 0,
+                    ease: 'power3.out',
+                    delay: 0.2
+                });
+                
+                gsap.from('.hero p', {
+                    duration: 1.2,
+                    y: 30,
+                    opacity: 0,
+                    ease: 'power3.out',
+                    delay: 0.6
+                });
+                
+                gsap.from('.cta-btn', {
+                    duration: 0.8,
+                    y: 20,
+                    opacity: 0,
+                    stagger: 0.2,
+                    ease: 'back.out',
+                    delay: 1
+                });
+                
+                // Staggered animation for feature cards on scroll
+                const featureCards = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: '.features',
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+                
+                featureCards.from('.feature-card', {
+                    duration: 0.6,
+                    y: 50,
+                    opacity: 0,
+                    stagger: 0.15,
+                    ease: 'power2.out'
+                });
+            }
+            
+            // Dynamic counters for statistics (placeholder functionality)
+            function startCounters() {
+                $('.counter').each(function () {
+                    const $this = $(this);
+                    const countTo = parseInt($this.attr('data-count'));
+                    
+                    $({ countNum: 0 }).animate({
+                        countNum: countTo
+                    }, {
+                        duration: 2000,
+                        easing: 'swing',
+                        step: function() {
+                            $this.text(Math.floor(this.countNum));
+                        },
+                        complete: function() {
+                            $this.text(this.countNum.toLocaleString());
+                        }
+                    });
+                });
+            }
+            
+            // Typed.js effect for dynamic text (if available)
+            if (window.Typed) {
+                new Typed('#typed-text', {
+                    strings: [
+                        'Semantic Web Services',
+                        'Ontology-Based Solutions',
+                        'Web Service Discovery',
+                        'Service Composition'
+                    ],
+                    typeSpeed: 50,
+                    backSpeed: 30,
+                    backDelay: 2000,
+                    loop: true
+                });
+            }
+            
+            // Add sticky navigation on scroll
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 100) {
+                    $('.nav-container').addClass('sticky');
+                } else {
+                    $('.nav-container').removeClass('sticky');
+                }
+            });
+            
+            // Handle form submissions (placeholder functionality)
+            $('#contact-form').submit(function(e) {
+                e.preventDefault();
+                
+                // Form validation logic would go here
+                
+                // Show success message
+                $('#form-response').html('<div class="success-message">Thank you for your message! We will get back to you soon.</div>');
+                
+                // Reset form
+                this.reset();
+            });
+            
+            // Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+            
+            // Back to top button functionality
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 300) {
+                    $('#back-to-top').fadeIn();
+                } else {
+                    $('#back-to-top').fadeOut();
+                }
+            });
+            
+            $('#back-to-top').click(function() {
+                $('html, body').animate({scrollTop: 0}, 800);
+                return false;
+            });
+            
+            // Handle theme toggle (placeholder functionality)
+            $('#theme-toggle').click(function() {
+                $('body').toggleClass('dark-theme');
+                
+                // Save preference to localStorage
+                const isDarkTheme = $('body').hasClass('dark-theme');
+                localStorage.setItem('dark-theme', isDarkTheme);
+            });
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('dark-theme') === 'true') {
+                $('body').addClass('dark-theme');
+            }
+            
+            // Add custom cursor effect for interactive elements
+            const cursor = $('<div class="custom-cursor"></div>');
+            $('body').append(cursor);
+            
+            $(document).mousemove(function(e) {
+                if (window.innerWidth > 768) {
+                    cursor.css({
+                        left: e.pageX,
+                        top: e.pageY
+                    });
+                }
+            });
+            
+            $('a, button, .accordion-header, .card, .feature-card').hover(
+                function() {
+                    cursor.addClass('cursor-active');
+                },
+                function() {
+                    cursor.removeClass('cursor-active');
+                }
+            );
+        });
+    </script>
+</body>
+</html>
+
+                    
+                    
